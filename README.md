@@ -10,7 +10,7 @@ https://drive.google.com/file/d/1afcznIvJK6Fy9OwlnO1un3eGq97oe5wx/view?usp=shari
 
 ## System Sequence Diagram
 
-<img src="./Architecture3D.png" alt="Website Architecture Diagram" width="100%" height="56.25%">
+<img src="./Architectrue.jpg" alt="Sequence Diagram" width="100%" height="56.25%">
 
 ## System Architecture Diagram
 
