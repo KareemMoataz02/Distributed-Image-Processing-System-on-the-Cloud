@@ -8,11 +8,11 @@ This Python application is designed to upload images to an Amazon S3 bucket, pro
 
 https://drive.google.com/file/d/1afcznIvJK6Fy9OwlnO1un3eGq97oe5wx/view?usp=sharing
 
-## System Sequence Diagram
+## System Architecture Diagram
 
 <img src="./Architectrue.jpg" alt="Sequence Diagram" width="100%" height="50%">
 
-## System Architecture Diagram
+## System Sequence Diagram
 
 <img src="./Sequence.jpg" alt="Website Architecture Diagram" width="100%" height="50%">
 
