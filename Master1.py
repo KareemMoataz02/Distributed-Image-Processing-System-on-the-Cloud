@@ -13,6 +13,8 @@ from PIL import Image, ImageTk
 import time
 import sys
 import io
+import paramiko
+import boto3
 
 s3_client = boto3.client('s3', region_name='us-east-1')
 sqs_client = boto3.client('sqs', region_name='us-east-1')
@@ -156,6 +158,31 @@ def upload_image(root, progress_bar, image_label):
         operation = select_processing_option(root)
         print(f"Selected operation: {operation}")
 
+        s3_client = boto3.client('s3')
+
+        # Download the key file from S3
+        s3_client.download_file(bucket_name, 'workerkey.pem', 'workerkey.pem')
+
+        # Create a new SSH client
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Load the private key file
+        pkey = paramiko.RSAKey.from_private_key_file('workerkey.pem')
+
+        # Connect to the SSH server
+        ssh.connect(hostname='ec2-18-209-17-107.compute-1.amazonaws.com',
+                    username='ec2-user', pkey=pkey)
+
+        print("Connected to the SSH server")
+
+        # Execute a command on the server
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
+            'mpirun -np 3 -hostfile nodefile python3 worker1.py')
+
+        print("Invoked Worker")
+        time.sleep(2)
+
         if operation:  # Only proceed if an operation is selected
             img = cv2.imread(file_path, cv2.IMREAD_COLOR)
 
@@ -179,6 +206,30 @@ def upload_multiple_images(root, progress_bar, image_label):
     if file_paths:
         operation = select_processing_option(root)
         print(f"Selected operation: {operation}")
+
+        s3_client = boto3.client('s3')
+
+        # Download the key file from S3
+        s3_client.download_file(bucket_name, 'workerkey.pem', 'workerkey.pem')
+
+        # Create a new SSH client
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Load the private key file
+        pkey = paramiko.RSAKey.from_private_key_file('workerkey.pem')
+
+        # Connect to the SSH server
+        ssh.connect(hostname='ec2-18-209-17-107.compute-1.amazonaws.com',
+                    username='ec2-user', pkey=pkey)
+
+        print("Connected to the SSH server")
+
+        # Execute a command on the server
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
+            'mpirun -np 3 -hostfile nodefile python3 worker1.py')
+
+        print("Invoked Worker")
 
         if operation:  # Only proceed if an operation is selected
             for file_path in file_paths:
